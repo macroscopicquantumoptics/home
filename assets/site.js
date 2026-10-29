@@ -36,6 +36,8 @@
     x += (tx - x) * (still ? 1 : 0.18);
     y += (ty - y) * (still ? 1 : 0.18);
     spot.style.transform = "translate(" + x + "px," + y + "px)";
+    frame.style.setProperty("--fx", x + "px");
+    frame.style.setProperty("--fy", y + "px");
     if (Math.abs(tx - x) > 0.3 || Math.abs(ty - y) > 0.3) requestAnimationFrame(draw);
     else running = false;
   }
@@ -48,4 +50,28 @@
     if (!running) { running = true; requestAnimationFrame(draw); }
   });
   frame.addEventListener("pointerleave", function () { frame.classList.remove("lit"); });
+})();
+
+// Hidden: typing "bec" on the home page splits the laser spot into interference fringes for a moment.
+(function () {
+  var frame = document.querySelector(".beam");
+  if (!frame || !frame.querySelector(".fringes")) return;
+  var typed = "", timer = null;
+
+  document.addEventListener("keydown", function (e) {
+    if (e.ctrlKey || e.metaKey || e.altKey || e.key.length !== 1) return;
+    if (e.target.closest && e.target.closest("input, textarea, select, [contenteditable]")) return;
+    typed = (typed + e.key.toLowerCase()).slice(-3);
+    if (typed !== "bec") return;
+
+    if (!frame.classList.contains("lit")) {
+      // no cursor in the frame: put the pattern under the title
+      var title = frame.querySelector("h1");
+      frame.style.setProperty("--fx", title.offsetLeft + title.offsetWidth / 2 + "px");
+      frame.style.setProperty("--fy", title.offsetTop + title.offsetHeight / 2 + "px");
+    }
+    frame.classList.add("bec");
+    clearTimeout(timer);
+    timer = setTimeout(function () { frame.classList.remove("bec"); }, 1400);
+  });
 })();
