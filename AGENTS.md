@@ -41,7 +41,7 @@ These follow the Aalto brand guidelines (https://brand.aalto.fi/en/brand/visual-
 - **Flat:** no cards, boxes, shadows, gradients, rounded corners, chips or tags, icons or arrows on links. Separate list items with a 1px hairline (`var(--line)`) and white space.
 - **Type:** three sizes only (page title, section title, body). Dates, roles and authors are body size in grey, not smaller. Sentence case, no UPPER CASE, left-aligned, ragged right. Bold a person's name on its first mention in running text.
 - **Alignment:** everything sits on one left edge; bulleted lists are indented further than their heading.
-- **Logos:** MQO logo top left, Aalto logo in the top right corner (linking to aalto.fi), MQO letters the same height as the Aalto "A?". On phones both logos share the top row and the navigation drops below them. The Aalto logo is a registered trademark: never crop, recolour (beyond the built-in dark-mode inversion) or stretch it. The MQO logo has separate light and dark files.
+- **Logos:** MQO logo top left, Aalto logo in the top right corner (linking to the group's page on aalto.fi), MQO letters the same height as the Aalto "A?". On phones both logos share the top row and the navigation drops below them. The Aalto logo is a registered trademark: never crop, recolour (beyond the built-in dark-mode inversion) or stretch it. The MQO logo has separate light and dark files.
 
 ## Writing
 
