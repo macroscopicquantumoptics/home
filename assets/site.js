@@ -1,24 +1,22 @@
-// Light/dark switch in the lower right. The page follows the system setting until someone picks a side.
+// Sun/moon toggle in the lower right. The page follows the system setting until someone flips it.
 (function () {
   var root = document.documentElement;
-  var buttons = document.querySelectorAll("[data-theme-choice]");
-  if (!buttons.length) return;
+  var toggle = document.querySelector(".theme-switch");
+  if (!toggle) return;
   var system = window.matchMedia("(prefers-color-scheme: dark)");
 
   function current() {
     return root.dataset.theme || (system.matches ? "dark" : "light");
   }
   function mark() {
-    var theme = current();
-    buttons.forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.themeChoice === theme)); });
+    toggle.setAttribute("aria-checked", String(current() === "dark"));
   }
 
-  buttons.forEach(function (b) {
-    b.addEventListener("click", function () {
-      root.dataset.theme = b.dataset.themeChoice;
-      try { localStorage.setItem("theme", b.dataset.themeChoice); } catch (e) {}
-      mark();
-    });
+  toggle.addEventListener("click", function () {
+    var next = current() === "dark" ? "light" : "dark";
+    root.dataset.theme = next;
+    try { localStorage.setItem("theme", next); } catch (e) {}
+    mark();
   });
   system.addEventListener("change", mark);
   mark();

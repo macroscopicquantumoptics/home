@@ -30,7 +30,7 @@ assets/news/               news pictures
 - **Open position:** add a `<section class="block">` to `join/index.html` with the title, deadline and how to apply, and take it down when the deadline passes.
 - **Header and footer** are repeated on every page. If you change one, change all seven files (find and replace across the folder). In each page, set `aria-current="page"` on that page's own nav link.
 
-Check your change by opening the page in a browser, in both light and dark mode (switch in the lower right corner), and at phone width. To preview the whole site with working links, run `python3 -m http.server` in this folder and open http://localhost:8000.
+Check your change by opening the page in a browser, in both light and dark mode (sun/moon switch in the lower right corner), and at phone width. To preview the whole site with working links, run `python3 -m http.server` in this folder and open http://localhost:8000.
 
 ## Look
 
