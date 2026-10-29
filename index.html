@@ -24,7 +24,6 @@
       <a href="people/">People</a>
       <a href="publications/">Publications</a>
       <a href="news/">News</a>
-      <button class="theme" type="button">Dark mode</button>
     </nav>
     <a class="aalto-link" href="https://www.aalto.fi/en/department-of-applied-physics/macroscopic-quantum-optics-mqo"><img class="aalto" src="assets/logos/aalto-logo-university.png" alt="Aalto University" width="441" height="359"></a>
   </div>
@@ -33,7 +32,8 @@
 <main id="main">
   <div class="wrap">
 
-    <section class="intro">
+    <section class="intro beam">
+      <div class="laser" aria-hidden="true"></div>
       <h1>Macroscopic Quantum Optics</h1>
       <p>We use experimental quantum optics in discrete and continuous variables to study quantum phenomena in <mark>large-scale and complex systems</mark>, from correlated light–matter states in molecular microcavities to the motion of levitated masses.</p>
       <p class="muted">The group is led by <strong>Anton Zasedatelev</strong> and is part of the Department of Applied Physics at Aalto University.</p>
@@ -114,6 +114,9 @@
     </div>
   </div>
 </footer>
+<div class="theme-switch" role="group" aria-label="Colour theme">
+  <button type="button" data-theme-choice="light" aria-pressed="false">Light</button><button type="button" data-theme-choice="dark" aria-pressed="false">Dark</button>
+</div>
 <script src="assets/site.js"></script>
 </body>
 </html>

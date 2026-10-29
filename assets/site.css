@@ -74,14 +74,28 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--fg); outline-of
 .nav a { text-decoration: none; }
 .nav a:hover { text-decoration: underline; background: none; color: inherit; }
 .nav a[aria-current="page"] { background: var(--accent); color: #000; padding: 0 .25em; margin: 0 -.25em; }
-.theme { font: inherit; color: var(--muted); background: none; border: 0; cursor: pointer; padding: 0; }
-.theme:hover { color: var(--fg); text-decoration: underline; text-underline-offset: .18em; }
+/* light/dark switch, floating in the lower right: left half is light, right half is dark, the active half is yellow */
+.theme-switch { position: fixed; right: 24px; bottom: 24px; z-index: 20; display: flex; border: 1px solid var(--fg); }
+.theme-switch button { font: inherit; font-size: 16px; line-height: 1; padding: 10px 14px; border: 0; border-radius: 0; cursor: pointer; }
+.theme-switch [data-theme-choice="light"] { background: #FFFFFF; color: #000000; }
+.theme-switch [data-theme-choice="dark"] { background: #000000; color: #FFFFFF; }
+.theme-switch [aria-pressed="true"] { background: var(--accent); color: #000000; cursor: default; }
+.theme-switch [aria-pressed="false"]:hover { text-decoration: underline; text-underline-offset: .18em; }
 
 /* ---------- page body ---------- */
 main { padding: 96px 0 120px; }
 .intro h1 { max-width: 16ch; }
 .intro p { margin-top: 32px; }
 .block { margin-top: 112px; }
+
+/* home: a laser spot follows the cursor inside the intro frame (mouse only; site.js moves it) */
+.beam { position: relative; isolation: isolate; overflow: hidden; margin: -48px -40px 0; padding: 48px 40px 56px; }
+.beam + .block { margin-top: 56px; }
+.laser { position: absolute; left: 0; top: 0; width: 160px; height: 160px; margin: -80px 0 0 -80px; z-index: -1;
+  border-radius: 50%; pointer-events: none; opacity: 0; transition: opacity .3s ease; will-change: transform;
+  background: radial-gradient(circle, #fff 0 4%, #ff2d2d 9%, rgba(255,45,45,.45) 22%, rgba(255,45,45,.12) 42%, rgba(255,45,45,0) 68%); }
+.beam.lit .laser { opacity: 1; }
+@media (hover: none), (pointer: coarse) { .laser { display: none; } }
 .block > h2 { margin-bottom: 32px; }
 .more { margin-top: 32px; }
 
@@ -163,13 +177,16 @@ main { padding: 96px 0 120px; }
   .brand .mqo { height: 37.1px; margin-top: -5.3px; }
   .nav { gap: 4px 20px; }
   main { padding: 56px 0 80px; }
+  .site-foot { padding-bottom: 96px; } /* room for the floating theme switch */
   .block { margin-top: 72px; }
+  .beam { margin: -32px -16px 0; padding: 32px 16px 40px; }
+  .beam + .block { margin-top: 32px; }
   .people { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 16px; }
   .year { grid-template-columns: 1fr; gap: 8px; }
   h3, .site-foot h2 { font-size: 17px; }
 }
 
 @media print {
-  .nav, .theme { display: none; }
+  .nav, .theme-switch { display: none; }
   main { padding: 32px 0; }
 }
