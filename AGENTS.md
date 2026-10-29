@@ -1,6 +1,6 @@
 # MQO group website: instructions for people and AI agents
 
-Website of the Macroscopic Quantum Optics group, Department of Applied Physics, Aalto University. It is plain HTML and one CSS file: no build step, no Node, no frameworks, no CDNs. Edit a page in any editor, open it in a browser, push to `main`, and GitHub Pages publishes it (`.github/workflows/pages.yml`).
+Website of the Macroscopic Quantum Optics group, Department of Applied Physics, Aalto University. It is plain HTML and one CSS file: no build step, no Node, no frameworks, no CDNs. Edit a page in any editor, open it in a browser, push to `main`, and GitHub Pages publishes it (`.github/workflows/static.yml`).
 
 The look follows the same Aalto brand rules as the group meeting slides, so the two stay consistent.
 
