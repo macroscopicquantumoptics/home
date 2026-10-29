@@ -11,6 +11,7 @@
 /* ---------- theme tokens: light by default, dark follows the system unless the toggle says otherwise ---------- */
 :root {
   --bg: #FFFFFF; --fg: #000000; --muted: #595959; --accent: #F7E159; --line: #D9D9D9; --blank: #F2F2F2;
+  --gutter: clamp(20px, 5vw, 80px); /* side margin, grows with the window */
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
@@ -28,7 +29,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { -webkit-text-size-adjust: 100%; }
 body { background: var(--bg); color: var(--fg); font-family: "Inter", Arial, sans-serif;
-  font-size: 18px; line-height: 1.55; }
+  font-size: 18px; line-height: 1.65; }
 img { display: block; max-width: 100%; height: auto; }
 ul { list-style: none; }
 
@@ -37,8 +38,8 @@ h1 { font-size: clamp(40px, 6vw, 72px); line-height: 1.08; font-weight: 700; let
 h2 { font-size: clamp(26px, 3vw, 32px); line-height: 1.2; font-weight: 700; letter-spacing: -0.025em; }
 h3 { font-size: 18px; line-height: 1.4; font-weight: 700; letter-spacing: -0.01em; }
 h1, h2, h3 { text-wrap: balance; }
-p { max-width: 68ch; text-wrap: pretty; }
-p + p { margin-top: 1em; }
+p { max-width: 64ch; text-wrap: pretty; }
+p + p { margin-top: 1.1em; }
 .muted { color: var(--muted); }
 strong, b { font-weight: 700; }
 mark { background: var(--accent); color: #000; padding: 0 .12em; }
@@ -51,10 +52,10 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--fg); outline-of
 .skip:focus { left: 16px; top: 16px; background: var(--accent); color: #000; padding: 8px 12px; z-index: 10; }
 
 /* everything shares one left edge */
-.wrap { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+.wrap { max-width: 1320px; margin: 0 auto; padding: 0 var(--gutter); }
 
 /* ---------- header: MQO logo left, navigation, Aalto logo in the top right corner ---------- */
-.site-head { padding: 32px 0 0; }
+.site-head { padding: 40px 0 0; }
 .site-head .wrap { display: flex; align-items: flex-start; gap: 24px 48px; }
 .brand, .aalto-link { display: block; flex: none; text-decoration: none; }
 .brand:hover, .aalto-link:hover { background: none; }
@@ -70,7 +71,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--fg); outline-of
   :root:not([data-theme="light"]) .only-dark { display: block; }
 }
 
-.nav { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 28px; padding-top: 4px; margin-left: auto; }
+.nav { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 36px; padding-top: 4px; margin-left: auto; }
 .nav a { text-decoration: none; }
 .nav a:hover { text-decoration: underline; background: none; color: inherit; }
 .nav a[aria-current="page"] { background: var(--accent); color: #000; padding: 0 .25em; margin: 0 -.25em; }
@@ -88,14 +89,14 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--fg); outline-of
 @media (prefers-reduced-motion: reduce) { .theme-switch::before { transition: none; } }
 
 /* ---------- page body ---------- */
-main { padding: 96px 0 120px; }
+main { padding: 128px 0 160px; }
 .intro h1 { max-width: 16ch; }
-.intro p { margin-top: 32px; }
-.block { margin-top: 112px; }
+.intro p { margin-top: 40px; }
+.block { margin-top: 144px; }
 
 /* home: a laser spot follows the cursor inside the intro frame (mouse only; site.js moves it) */
-.beam { position: relative; isolation: isolate; overflow: hidden; margin: -48px -40px 0; padding: 48px 40px 56px; }
-.beam + .block { margin-top: 56px; }
+.beam { position: relative; isolation: isolate; overflow: hidden; margin: -48px calc(-1 * var(--gutter)) 0; padding: 48px var(--gutter) 72px; }
+.beam + .block { margin-top: 72px; }
 .laser { position: absolute; left: 0; top: 0; width: 160px; height: 160px; margin: -80px 0 0 -80px; z-index: -1;
   border-radius: 50%; pointer-events: none; opacity: 0; transition: opacity .3s ease; will-change: transform;
   background: radial-gradient(circle, #fff 0 4%, #ff2d2d 9%, rgba(255,45,45,.45) 22%, rgba(255,45,45,.12) 42%, rgba(255,45,45,0) 68%); }
@@ -111,65 +112,65 @@ main { padding: 96px 0 120px; }
 .beam.bec .laser { opacity: 0; }
 @media (prefers-reduced-motion: reduce) { .fringes { transition: none; } }
 @media (hover: none), (pointer: coarse) { .laser { display: none; } }
-.block > h2 { margin-bottom: 32px; }
-.more { margin-top: 32px; }
+.block > h2 { margin-bottom: 48px; }
+.more { margin-top: 40px; }
 
 /* home: research directions side by side, no boxes */
-.cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; }
-.cols h3 { margin-bottom: 8px; }
+.cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 64px; }
+.cols h3 { margin-bottom: 12px; }
 .cols h3 a { text-decoration: none; }
 .cols h3 a:hover { text-decoration: none; }
 
 /* lists separated by hairlines (news, publications, research) */
-.rows > li, .rows > article { border-top: 1px solid var(--line); padding: 32px 0; }
+.rows > li, .rows > article { border-top: 1px solid var(--line); padding: 44px 0; }
 .rows > li:last-child, .rows > article:last-child { border-bottom: 1px solid var(--line); }
-.meta { color: var(--muted); margin-bottom: 6px; }
+.meta { color: var(--muted); margin-bottom: 10px; }
 
 /* news: text on the left, picture on the right */
-.news { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 48px; align-items: start; }
-.news h3 { margin-bottom: 8px; }
-.news p + p, .news .link { margin-top: 12px; }
+.news { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 72px; align-items: start; }
+.news h3 { margin-bottom: 12px; }
+.news p + p, .news .link { margin-top: 16px; }
 .news:not(:has(figure)) { grid-template-columns: minmax(0, 1fr); }
 .news figcaption { color: var(--muted); margin-top: 8px; }
 
 /* research page */
 .area { scroll-margin-top: 24px; }
-.area h2 { margin-bottom: 24px; max-width: 24ch; }
-.area .keywords { margin-top: 20px; color: var(--muted); }
-.rows > article.area { padding: 56px 0; }
+.area h2 { margin-bottom: 32px; max-width: 24ch; }
+.area .keywords { margin-top: 28px; color: var(--muted); }
+.rows > article.area { padding: 72px 0; }
 
 /* people */
-.people { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 48px 32px; }
-.people img, .people .no-photo { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; margin-bottom: 16px; }
+.people { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 72px 48px; }
+.people img, .people .no-photo { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; margin-bottom: 20px; }
 .people .no-photo { background: var(--blank); }
 .people p { overflow-wrap: anywhere; }
 .people .role { color: var(--muted); }
-.lead { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 48px; align-items: start; }
+.lead { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 64px; align-items: start; }
 .lead img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; }
 .lead h3 { margin-bottom: 4px; }
-.lead .role { color: var(--muted); margin-bottom: 20px; }
+.lead .role { color: var(--muted); margin-bottom: 24px; }
 
 /* publications: year on the left, papers on the right */
-.year { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 32px; }
-.year + .year { margin-top: 64px; }
+.year { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 48px; }
+.year + .year { margin-top: 96px; }
 .year > h2 { line-height: 1.6; }
-.pubs > li { padding: 20px 0; border-top: 1px solid var(--line); }
-.pubs > li:first-child { border-top: 0; padding-top: 4px; }
-.pubs a { font-weight: 700; text-decoration: none; }
+.pubs > li { padding: 28px 0; border-top: 1px solid var(--line); }
+.pubs > li:first-child { border-top: 0; padding-top: 6px; }
+.pubs a { display: inline-block; margin-bottom: 6px; font-weight: 700; text-decoration: none; }
 .pubs a:hover { text-decoration: none; }
 .pubs p { color: var(--muted); }
 .pubs p + p { margin-top: 0; }
 
 /* plain bulleted list, indented further than its heading */
-.bullets { margin: 16px 0 0 28px; }
+.bullets { margin: 24px 0 0 28px; }
 .bullets li { position: relative; padding-left: 4px; }
-.bullets li + li { margin-top: 6px; }
+.bullets li + li { margin-top: 10px; }
 .bullets li::before { content: ""; position: absolute; left: -20px; top: .62em; width: 7px; height: 7px; border-radius: 50%; background: var(--fg); }
 
 /* ---------- footer ---------- */
-.site-foot { border-top: 1px solid var(--line); padding: 48px 0 64px; color: var(--muted); }
-.site-foot .wrap { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 48px; }
-.site-foot h2 { font-size: 18px; letter-spacing: -0.01em; color: var(--fg); margin-bottom: 8px; }
+.site-foot { border-top: 1px solid var(--line); padding: 72px 0 96px; color: var(--muted); }
+.site-foot .wrap { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px 64px; }
+.site-foot h2 { font-size: 18px; letter-spacing: -0.01em; color: var(--fg); margin-bottom: 12px; }
 .site-foot address { font-style: normal; }
 
 /* ---------- narrow screens ---------- */
@@ -177,27 +178,30 @@ main { padding: 96px 0 120px; }
   /* logos share the top row, MQO left and Aalto right; the navigation drops below */
   .site-head .wrap { flex-wrap: wrap; justify-content: space-between; }
   .nav { order: 3; flex-basis: 100%; margin-left: 0; }
-  .cols { grid-template-columns: 1fr; gap: 32px; }
-  .news { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .cols { grid-template-columns: 1fr; gap: 48px; }
+  .news { grid-template-columns: minmax(0, 1fr); gap: 24px; }
   .news figure { max-width: 420px; }
-  .lead { grid-template-columns: 1fr; gap: 24px; }
-  .lead img { max-width: 280px; }
+  .lead { grid-template-columns: 1fr; gap: 32px; }
+  .lead img { max-width: 300px; }
   .site-foot .wrap { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
   body { font-size: 17px; }
-  .wrap { padding: 0 16px; }
-  .site-head { padding-top: 20px; }
+  .site-head { padding-top: 24px; }
   .aalto { height: 30px; }
   .brand .mqo { height: 37.1px; margin-top: -5.3px; }
   .nav { gap: 4px 20px; }
-  main { padding: 56px 0 80px; }
-  .site-foot { padding-bottom: 96px; } /* room for the floating theme switch */
-  .block { margin-top: 72px; }
-  .beam { margin: -32px -16px 0; padding: 32px 16px 40px; }
-  .beam + .block { margin-top: 32px; }
-  .people { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 16px; }
-  .year { grid-template-columns: 1fr; gap: 8px; }
+  main { padding: 72px 0 96px; }
+  .site-foot { padding: 56px 0 112px; } /* room for the floating theme switch */
+  .block { margin-top: 96px; }
+  .block > h2 { margin-bottom: 32px; }
+  .beam { margin-top: -32px; padding-top: 32px; padding-bottom: 48px; }
+  .beam + .block { margin-top: 48px; }
+  .rows > li, .rows > article { padding: 36px 0; }
+  .rows > article.area { padding: 56px 0; }
+  .people { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px 20px; }
+  .year { grid-template-columns: 1fr; gap: 12px; }
+  .year + .year { margin-top: 72px; }
   h3, .site-foot h2 { font-size: 17px; }
 }
 
