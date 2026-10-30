@@ -4,7 +4,7 @@
 //   bench:  a polariton condensate forming on the optical table as the pump power grows, after Ho et al., arXiv:2601.15080
 //   pairs: a double-resonant cavity emitting entangled IR and visible photons, after Fig. 1 of Shishkov et al., arXiv:2508.10809
 // three.js is bundled in assets/vendor/three (MIT licence), so the page still makes no outside requests.
-// Without WebGL nothing changes: the video in .hero-media stays.
+// Without WebGL the video in .hero-media plays instead (site.js).
 import * as THREE from "three";
 import { OrbitControls } from "./vendor/three/controls/OrbitControls.js";
 import { EffectComposer } from "./vendor/three/postprocessing/EffectComposer.js";
@@ -20,14 +20,18 @@ const media = hero && hero.querySelector(".hero-media");
 const picker = document.querySelector(".hero-pick");
 const ORDER = ["trap", "cavity", "bench", "pairs"];
 const BUILD = { trap: trapModel, cavity: cavityModel, bench: benchModel, pairs: pairsModel };
-if (media) start();
+if (media) {
+  media.classList.add("starting"); // the module has loaded: from here it decides between the model and the video
+  start();
+}
 
 function start() {
   let renderer;
   try {
     renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
   } catch (e) {
-    return; // no WebGL: keep the video
+    media.dispatchEvent(new Event("flat")); // no WebGL: the video plays instead (site.js)
+    return;
   }
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.toneMapping = THREE.NeutralToneMapping;
@@ -102,8 +106,10 @@ function start() {
 
   function resetView() {
     const v = current.view;
-    camera.position.set(...v.position);
     controls.target.set(...v.target);
+    camera.position.set(...v.position);
+    // the phone picture is a small band, so the camera comes closer there (view.phone, a fraction of the distance)
+    if (media.clientWidth <= 900 && v.phone) camera.position.lerp(controls.target, 1 - v.phone);
     controls.minDistance = v.near;
     controls.maxDistance = v.far;
     controls.maxPolarAngle = v.maxPolar || Math.PI;
@@ -162,10 +168,9 @@ function start() {
     });
   }
 
-  show("trap");
-  media.classList.add("live");
-  const video = media.querySelector("video");
-  if (video) video.pause();
+  show("trap"); // draws the first frame
+  void canvas.offsetWidth; // settle the canvas at opacity 0 first, so the fade runs
+  media.classList.add("live"); // and the picture fades in
   run();
 }
 
@@ -252,25 +257,30 @@ function trapModel(renderer) {
   }));
   scene.add(surface);
 
-  // the trapped particle: a mirror-like sphere that reflects the light field around it
-  const cube = new THREE.WebGLCubeRenderTarget(256);
+  // the trapped particle: a mirror-like sphere that reflects the light field around it. Its highlight is the
+  // reflection of a round light above (seen only by the reflection), so it stays round; a point light's
+  // highlight on so glossy a sphere is a few pixels across, and the glow pass smears it into a square.
+  const lamp = new THREE.Mesh(new THREE.CircleGeometry(1.1, 48), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+  lamp.position.set(-2.2, 5, 2.4);
+  lamp.lookAt(0, 0.45, 0);
+  lamp.layers.set(1);
+  scene.add(lamp);
+  const cube = new THREE.WebGLCubeRenderTarget(512, { type: THREE.HalfFloatType });
   const cubeCam = new THREE.CubeCamera(0.1, 60, cube);
+  cubeCam.children.forEach((c) => c.layers.enable(1));
   cubeCam.position.set(0, 0.45, 0);
   cubeCam.update(renderer, scene);
   const particle = new THREE.Mesh(
-    new THREE.SphereGeometry(0.34, 64, 32),
-    new THREE.MeshStandardMaterial({ color: 0xb8b8c8, metalness: 1, roughness: 0.06, envMap: cube.texture })
+    new THREE.SphereGeometry(0.34, 96, 48),
+    new THREE.MeshStandardMaterial({ color: 0xb8b8c8, metalness: 1, roughness: 0.08, envMap: cube.texture })
   );
   particle.position.copy(cubeCam.position);
   scene.add(particle);
-  const glint = new THREE.PointLight(0xffffff, 6, 6);
-  glint.position.set(-1.5, 3, 2);
-  scene.add(glint);
 
   return {
     scene, bloom: 0.55,
     // maxPolar keeps the camera above the light field: from below it is only an empty shell
-    view: { position: [-9.5, 7.2, 12.5], target: [0.6, 0.2, 0], near: 3, far: 45, shift: 0.2, maxPolar: 1.38 },
+    view: { position: [-5.0, 8.5, 7.7], target: [0.4, 0.3, 0], near: 2, far: 45, shift: 0.24, phone: 0.62, maxPolar: 1.38 },
     // the particle oscillates along the trap axis, once every three seconds
     update(t) {
       particle.position.x = 0.5 * Math.sin((2 * Math.PI * t) / 3);
@@ -400,7 +410,8 @@ function cavityModel(renderer) {
 
   return {
     scene, bloom: 0.5,
-    view: { position: [3, 4.6, 15.5], target: [0.4, -0.1, 0], near: 3, far: 40, shift: 0.14 },
+    // from beside the left mirror, looking along the cavity towards the right one
+    view: { position: [-6.8, 2.6, 4.6], target: [1.2, 0.2, -0.3], near: 2, far: 40, shift: 0.14, phone: 0.9 },
     update(t) {
       waves.forEach((w) => w.update(t));
       molecules.forEach((m) => {
@@ -609,19 +620,39 @@ function benchModel(renderer) {
   const bezel = new THREE.Mesh(rounded(3.7, 2.9, 0.14, 0.05), black);
   bezel.position.z = -0.08;
   bezel.castShadow = true;
-  const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, AX + 1.2, 16), steel);
-  arm.position.set(0, -(AX + 1.2) / 2 - 1.3, -0.2);
+  const MY = AX + 1.7;                       // the monitor's centre height
+  const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, MY - 1.3, 16), steel);
+  arm.position.set(0, -(MY - 1.3) / 2 - 1.3, -0.2);
   arm.castShadow = true;
   monitor.add(bezel, screen, arm);
-  monitor.position.set(camX + 1.6, AX + 2.3, -3.2);
-  monitor.rotation.y = -0.35;
+  monitor.position.set(camX + 1.6, MY, -3.2);
+  monitor.rotation.y = -0.95; // turned towards the bench, so its picture faces the laser end
   scene.add(monitor);
+
+  // the camera's cable: out of its back, down to the table, across to the monitor's stand and up it
+  const mx = monitor.position.x, mz = monitor.position.z, mBottom = monitor.position.y - 1.45;
+  const cablePath = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(camX + 1.3, AX, 0),
+    new THREE.Vector3(camX + 1.75, AX - 0.3, 0.05),
+    new THREE.Vector3(camX + 1.95, 0.6, 0.1),
+    new THREE.Vector3(camX + 2.1, 0.06, -0.3),
+    new THREE.Vector3((camX + 2.1 + mx) / 2 + 0.4, 0.06, (mz - 0.3) / 2 - 0.2),
+    new THREE.Vector3(mx + 0.22, 0.08, mz + 0.05),
+    new THREE.Vector3(mx + 0.16, 1.2, mz + 0.02),
+    new THREE.Vector3(mx + 0.14, mBottom - 0.2, mz),
+    new THREE.Vector3(mx + 0.1, mBottom + 0.05, mz - 0.02),
+  ]);
+  const cable = new THREE.Mesh(new THREE.TubeGeometry(cablePath, 200, 0.035, 10),
+    new THREE.MeshPhysicalMaterial({ color: 0x101114, roughness: 0.55, clearcoat: 0.4, clearcoatRoughness: 0.3 }));
+  cable.castShadow = true;
+  scene.add(cable);
 
   // pump power over one cycle: up from 0.2 to 2 times threshold over 6.5 s, a hold, then down and again
   const CYCLE = 9;
   return {
     scene, bloom: 0.6,
-    view: { position: [-3.2, 8.2, 14.5], target: [1.0, 2.0, -0.6], near: 4, far: 40, shift: 0.17, maxPolar: 1.45 },
+    // from just behind the laser, looking along the beam to the sample, the camera and its monitor
+    view: { position: [-8.4, 4.4, -2.4], target: [1.5, 2.5, -0.6], near: 2, far: 40, shift: 0.24, phone: 0.9, maxPolar: 1.45 },
     update(t) {
       const c = t % CYCLE;
       const P = c < 6.5 ? 0.2 + 1.8 * THREE.MathUtils.smoothstep(c, 0, 6.5) : c < 8.4 ? 2 : 2 - 1.8 * THREE.MathUtils.smoothstep(c, 8.4, 9);
@@ -792,7 +823,7 @@ function pairsModel(renderer) {
 
   return {
     scene, bloom: 0.55,
-    view: { position: [8.1, 8, 15.6], target: [0, 2.1, 0], near: 4, far: 45, shift: 0.18 },
+    view: { position: [7.2, 6.4, 13.6], target: [0, 1.5, 0], near: 3, far: 45, shift: 0.18, phone: 0.85 },
     update(t) {
       irUniforms.t.value = t;
       lattice.forEach((w) => w.update(t));

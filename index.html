@@ -18,6 +18,8 @@
         var t = localStorage.getItem("theme");
         if (t) document.documentElement.dataset.theme = t;
       } catch (e) {}
+      // with scripts on, the hero waits for the 3D model rather than flashing the video first
+      document.documentElement.classList.add("js");
     </script>
   </head>
   <body>
@@ -72,7 +74,6 @@
         <div class="hero-media">
           <video
             aria-hidden="true"
-            autoplay
             muted
             loop
             playsinline
@@ -84,20 +85,71 @@
           </video>
           <div class="hero-pick" role="group" aria-label="Model" hidden>
             <button type="button" data-step="-1" aria-label="Previous model">
-              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" /></svg>
+              <svg viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M10 3 5 8l5 5" />
+              </svg>
             </button>
-            <button type="button" class="dot" data-scene="trap" aria-pressed="true" aria-label="Dark optical trap"></button>
-            <button type="button" class="dot" data-scene="cavity" aria-pressed="false" aria-label="Molecules in a microcavity"></button>
-            <button type="button" class="dot" data-scene="bench" aria-pressed="false" aria-label="A polariton condensate forming on the optical table"></button>
-            <button type="button" class="dot" data-scene="pairs" aria-pressed="false" aria-label="Entangled polariton pairs"></button>
+            <button
+              type="button"
+              class="dot"
+              data-scene="trap"
+              aria-pressed="true"
+              aria-label="Dark optical trap"
+            ></button>
+            <button
+              type="button"
+              class="dot"
+              data-scene="cavity"
+              aria-pressed="false"
+              aria-label="Molecules in a microcavity"
+            ></button>
+            <button
+              type="button"
+              class="dot"
+              data-scene="bench"
+              aria-pressed="false"
+              aria-label="A polariton condensate forming on the optical table"
+            ></button>
+            <button
+              type="button"
+              class="dot"
+              data-scene="pairs"
+              aria-pressed="false"
+              aria-label="Entangled polariton pairs"
+            ></button>
             <button type="button" data-step="1" aria-label="Next model">
-              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" /></svg>
+              <svg viewBox="0 0 16 16" aria-hidden="true">
+                <path d="m6 3 5 5-5 5" />
+              </svg>
             </button>
           </div>
-          <a class="hero-paper" data-for="trap" href="https://arxiv.org/abs/2607.09896">arXiv:2607.09896</a>
-          <a class="hero-paper" data-for="cavity" href="https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.133.186903" hidden>Phys. Rev. Lett. 133, 186903</a>
-          <a class="hero-paper" data-for="bench" href="https://arxiv.org/abs/2601.15080" hidden>arXiv:2601.15080</a>
-          <a class="hero-paper" data-for="pairs" href="https://arxiv.org/abs/2508.10809" hidden>arXiv:2508.10809</a>
+          <a
+            class="hero-paper"
+            data-for="trap"
+            href="https://arxiv.org/abs/2607.09896"
+            >arXiv:2607.09896</a
+          >
+          <a
+            class="hero-paper"
+            data-for="cavity"
+            href="https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.133.186903"
+            hidden
+            >Phys. Rev. Lett. 133, 186903</a
+          >
+          <a
+            class="hero-paper"
+            data-for="bench"
+            href="https://arxiv.org/abs/2601.15080"
+            hidden
+            >arXiv:2601.15080</a
+          >
+          <a
+            class="hero-paper"
+            data-for="pairs"
+            href="https://arxiv.org/abs/2508.10809"
+            hidden
+            >arXiv:2508.10809</a
+          >
         </div>
         <div class="wrap">
           <div>
@@ -113,7 +165,6 @@
       </section>
 
       <div class="wrap">
-
         <section class="block">
           <h2>Research</h2>
           <div class="cols">
@@ -260,7 +311,9 @@
                 >LinkedIn</a
               >
             </li>
-            <li><a href="https://github.com/macroscopicquantumoptics">GitHub</a></li>
+            <li>
+              <a href="https://github.com/macroscopicquantumoptics">GitHub</a>
+            </li>
           </ul>
         </div>
       </div>
@@ -283,6 +336,13 @@
       </svg>
     </button>
     <script src="assets/site.js"></script>
-    <script type="module" src="assets/hero3d.js"></script>
+    <script
+      type="module"
+      src="assets/hero3d.js"
+      onerror="document.querySelector('.hero-media').dispatchEvent(new Event('flat'))"
+    ></script>
+    <script nomodule>
+      document.querySelector(".hero-media").dispatchEvent(new Event("flat"));
+    </script>
   </body>
 </html>
