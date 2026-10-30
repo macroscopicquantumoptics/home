@@ -22,56 +22,30 @@
   mark();
 })();
 
-// Home page: a laser spot that trails the cursor inside the intro frame.
+// Home page: the dark-trap rendering leans a little towards the cursor, like looking into the trap from a new angle.
 (function () {
-  var frame = document.querySelector(".beam");
-  var spot = frame && frame.querySelector(".laser");
-  if (!spot || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+  var hero = document.querySelector(".hero");
+  var media = hero && hero.querySelector(".hero-media");
+  if (!media) return;
+  var video = media.querySelector("video");
+  var still = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-  var still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var x = 0, y = 0, tx = 0, ty = 0, running = false;
-
-  function draw() {
-    // ease towards the cursor, like a steering mirror catching up
-    x += (tx - x) * (still ? 1 : 0.18);
-    y += (ty - y) * (still ? 1 : 0.18);
-    spot.style.transform = "translate(" + x + "px," + y + "px)";
-    frame.style.setProperty("--fx", x + "px");
-    frame.style.setProperty("--fy", y + "px");
-    if (Math.abs(tx - x) > 0.3 || Math.abs(ty - y) > 0.3) requestAnimationFrame(draw);
-    else running = false;
+  // reduced motion: show the first frame only
+  function motion() {
+    if (!video) return;
+    if (still.matches) video.pause();
+    else video.play().catch(function () {});
   }
+  still.addEventListener("change", motion);
+  motion();
 
-  frame.addEventListener("pointermove", function (e) {
-    var box = frame.getBoundingClientRect();
-    tx = e.clientX - box.left;
-    ty = e.clientY - box.top;
-    if (!frame.classList.contains("lit")) { x = tx; y = ty; frame.classList.add("lit"); }
-    if (!running) { running = true; requestAnimationFrame(draw); }
+  if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+  hero.addEventListener("pointermove", function (e) {
+    if (still.matches) return;
+    var box = hero.getBoundingClientRect();
+    var dx = (e.clientX - box.left) / box.width - 0.5;
+    var dy = (e.clientY - box.top) / box.height - 0.5;
+    media.style.transform = "translate(" + (-dx * 2.4) + "%," + (-dy * 2.4) + "%) scale(1.03)";
   });
-  frame.addEventListener("pointerleave", function () { frame.classList.remove("lit"); });
-})();
-
-// Hidden: typing "bec" on the home page splits the laser spot into interference fringes for a moment.
-(function () {
-  var frame = document.querySelector(".beam");
-  if (!frame || !frame.querySelector(".fringes")) return;
-  var typed = "", timer = null;
-
-  document.addEventListener("keydown", function (e) {
-    if (e.ctrlKey || e.metaKey || e.altKey || e.key.length !== 1) return;
-    if (e.target.closest && e.target.closest("input, textarea, select, [contenteditable]")) return;
-    typed = (typed + e.key.toLowerCase()).slice(-3);
-    if (typed !== "bec") return;
-
-    if (!frame.classList.contains("lit")) {
-      // no cursor in the frame: put the pattern under the title
-      var title = frame.querySelector("h1");
-      frame.style.setProperty("--fx", title.offsetLeft + title.offsetWidth / 2 + "px");
-      frame.style.setProperty("--fy", title.offsetTop + title.offsetHeight / 2 + "px");
-    }
-    frame.classList.add("bec");
-    clearTimeout(timer);
-    timer = setTimeout(function () { frame.classList.remove("bec"); }, 1400);
-  });
+  hero.addEventListener("pointerleave", function () { media.style.transform = ""; });
 })();

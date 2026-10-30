@@ -94,24 +94,19 @@ main { padding: 128px 0 160px; }
 .intro p { margin-top: 40px; }
 .block { margin-top: 144px; }
 
-/* home: a laser spot follows the cursor inside the intro frame (mouse only; site.js moves it) */
-.beam { position: relative; isolation: isolate; overflow: hidden; margin: -48px calc(-1 * var(--gutter)) 0; padding: 48px var(--gutter) 72px; }
-.beam + .block { margin-top: 72px; }
-.laser { position: absolute; left: 0; top: 0; width: 160px; height: 160px; margin: -80px 0 0 -80px; z-index: -1;
-  border-radius: 50%; pointer-events: none; opacity: 0; transition: opacity .3s ease; will-change: transform;
-  background: radial-gradient(circle, #fff 0 4%, #ff2d2d 9%, rgba(255,45,45,.45) 22%, rgba(255,45,45,.12) 42%, rgba(255,45,45,0) 68%); }
-.beam.lit .laser { opacity: 1; }
-/* typing "bec" spreads the spot into two-slit fringes under a soft envelope, then back (site.js) */
-.fringes { position: absolute; left: 0; top: 0; width: 420px; height: 140px; margin: -70px 0 0 -210px; z-index: -1;
-  pointer-events: none; opacity: 0; transform: translate(var(--fx, 0), var(--fy, 0)) scaleX(.06);
-  transition: opacity .3s ease, transform .35s ease;
-  background: repeating-linear-gradient(90deg, rgba(255,45,45,0) 0, rgba(255,45,45,.9) 12px, rgba(255,45,45,0) 24px) center / 24px 100%;
-  -webkit-mask-image: radial-gradient(closest-side, #000 15%, transparent);
-  mask-image: radial-gradient(closest-side, #000 15%, transparent); }
-.beam.bec .fringes { opacity: 1; transform: translate(var(--fx, 0), var(--fy, 0)) scaleX(1); }
-.beam.bec .laser { opacity: 0; }
-@media (prefers-reduced-motion: reduce) { .fringes { transition: none; } }
-@media (hover: none), (pointer: coarse) { .laser { display: none; } }
+/* home: full-width rendering of the dark optical trap behind the title. The video is a seamless loop
+   of the trapped particle oscillating; site.js tilts it a little with the cursor. Dark in both themes. */
+main:has(> .hero) { padding-top: 40px; }
+.hero { position: relative; overflow: hidden; background: #000; color: #FFFFFF; height: min(78vh, 780px); min-height: 520px; }
+.hero-media { position: absolute; inset: -3%; will-change: transform; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+.hero-media video, .hero-media img { width: 100%; height: 100%; object-fit: cover; object-position: 63% 20%; }
+.hero .wrap { position: relative; height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding-top: 72px; padding-bottom: 32px; }
+.hero h1 { max-width: 12ch; }
+.hero p { margin-top: 32px; max-width: 34ch; }
+.credit { color: var(--muted); margin-top: 16px; }
+.hero + .wrap > .credit + .block { margin-top: 112px; }
+@media (prefers-reduced-motion: reduce) { .hero-media { transition: none; } }
+
 .block > h2 { margin-bottom: 48px; }
 .more { margin-top: 40px; }
 
@@ -132,12 +127,18 @@ main { padding: 128px 0 160px; }
 .news p + p, .news .link { margin-top: 16px; }
 .news:not(:has(figure)) { grid-template-columns: minmax(0, 1fr); }
 .news figcaption { color: var(--muted); margin-top: 8px; }
+/* resources: screenshots get more room and a hairline, since they are mostly white */
+.tools > .news { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 56px; }
+.tools img { border: 1px solid var(--line); }
 
 /* research page */
 .area { scroll-margin-top: 24px; }
 .area h2 { margin-bottom: 32px; max-width: 24ch; }
 .area .keywords { margin-top: 28px; color: var(--muted); }
 .rows > article.area { padding: 72px 0; }
+.area-fig { margin-top: 40px; max-width: 880px; }
+.area-fig figcaption { color: var(--muted); margin-top: 12px; max-width: 64ch; }
+.area > h3 { margin-top: 40px; margin-bottom: 8px; }
 
 /* people */
 .people { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 72px 48px; }
@@ -148,6 +149,21 @@ main { padding: 128px 0 160px; }
 .lead { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 64px; align-items: start; }
 .lead img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; }
 .lead h3 { margin-bottom: 4px; }
+.people h3 a, .lead h3 a { text-decoration: none; }
+.people h3 a:hover, .lead h3 a:hover { text-decoration: none; }
+.face { display: block; }
+.face:hover { background: none; }
+/* hovering or focusing a person shows their contact details over the lower edge of the photo */
+.people > li { position: relative; }
+.people .pop { position: absolute; top: 0; left: 0; right: 0; aspect-ratio: 3 / 4; display: none; align-items: flex-end; pointer-events: none; }
+.people .pop p { width: 100%; background: var(--bg); border-top: 1px solid var(--line); padding: 10px 12px; pointer-events: auto; }
+.people > li:hover .pop, .people > li:focus-within .pop { display: flex; }
+@media (hover: none) { .people > li:hover .pop { display: none; } }
+/* profile pages */
+.crumb { margin-bottom: 48px; color: var(--muted); }
+.profile h1 { margin-bottom: 12px; }
+.profile .role { margin-bottom: 24px; }
+.handles li + li { margin-top: 6px; }
 .lead .role { color: var(--muted); margin-bottom: 24px; }
 
 /* publications: year on the left, papers on the right */
@@ -179,7 +195,11 @@ main { padding: 128px 0 160px; }
   .site-head .wrap { flex-wrap: wrap; justify-content: space-between; }
   .nav { order: 3; flex-basis: 100%; margin-left: 0; }
   .cols { grid-template-columns: 1fr; gap: 48px; }
-  .news { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  /* phones and tablets: the picture becomes a band under the header and the text sits below it */
+  .hero { height: auto; min-height: 0; background: none; color: inherit; }
+  .hero-media { position: relative; inset: auto; aspect-ratio: 16 / 9; transform: none !important; }
+  .hero .wrap { height: auto; padding-top: 48px; padding-bottom: 0; }
+  .news, .tools > .news { grid-template-columns: minmax(0, 1fr); gap: 24px; }
   .news figure { max-width: 420px; }
   .lead { grid-template-columns: 1fr; gap: 32px; }
   .lead img { max-width: 300px; }
@@ -195,8 +215,6 @@ main { padding: 128px 0 160px; }
   .site-foot { padding: 56px 0 112px; } /* room for the floating theme switch */
   .block { margin-top: 96px; }
   .block > h2 { margin-bottom: 32px; }
-  .beam { margin-top: -32px; padding-top: 32px; padding-bottom: 48px; }
-  .beam + .block { margin-top: 48px; }
   .rows > li, .rows > article { padding: 36px 0; }
   .rows > article.area { padding: 56px 0; }
   .people { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px 20px; }
