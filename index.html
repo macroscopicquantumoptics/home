@@ -48,6 +48,8 @@
           <a href="people/">People</a>
           <a href="publications/">Publications</a>
           <a href="news/">News</a>
+          <a href="resources/">Resources</a>
+          <a href="join/">Positions</a>
         </nav>
         <a
           class="aalto-link"
@@ -63,18 +65,39 @@
     </header>
 
     <main id="main">
+      <section class="hero">
+        <div class="hero-media" aria-hidden="true">
+          <video
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="auto"
+            poster="assets/hero/dark-trap.jpg"
+          >
+            <source src="assets/hero/dark-trap.webm" type="video/webm" />
+            <source src="assets/hero/dark-trap.mp4" type="video/mp4" />
+          </video>
+        </div>
+        <div class="wrap">
+          <div>
+            <h1>Macroscopic Quantum Optics</h1>
+            <p>
+              We use experimental quantum optics in discrete and continuous
+              variables to study quantum phenomena in large-scale and complex
+              systems, from correlated light–matter states in molecular
+              microcavities to the motion of levitated masses.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <div class="wrap">
-        <section class="intro beam">
-          <div class="laser" aria-hidden="true"></div>
-          <div class="fringes" aria-hidden="true"></div>
-          <h1>Macroscopic Quantum Optics</h1>
-          <p>
-            We use experimental quantum optics in discrete and continuous
-            variables to study quantum phenomena in large-scale and complex
-            systems, from correlated light–matter states in molecular
-            microcavities to the motion of levitated masses.
-          </p>
-        </section>
+        <p class="credit">
+          A WS<sub>2</sub> particle held in a dark optical trap, rendered from
+          simulated intensity data
+          (<a href="https://arxiv.org/abs/2607.09896">arXiv:2607.09896</a>).
+        </p>
 
         <section class="block">
           <h2>Research</h2>
@@ -118,6 +141,7 @@
         <section class="block">
           <h2>News</h2>
           <ul class="rows">
+            <!-- news:start: the newest three items from news/index.html (tools/linkedin_news.py refreshes them) -->
             <li class="news">
               <div>
                 <p class="meta">2 September 2026 · Event</p>
@@ -180,6 +204,7 @@
                 </p>
               </div>
             </li>
+            <!-- news:end -->
           </ul>
           <p class="more"><a href="news/">All news</a></p>
         </section>
@@ -220,6 +245,7 @@
                 >LinkedIn</a
               >
             </li>
+            <li><a href="https://github.com/macroscopicquantumoptics">GitHub</a></li>
           </ul>
         </div>
       </div>

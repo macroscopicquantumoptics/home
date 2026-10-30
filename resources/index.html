@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resources · Macroscopic Quantum Optics · Aalto University</title>
+<meta name="description" content="Open-source software and web tools made by the Macroscopic Quantum Optics group at Aalto University.">
+<link rel="icon" href="../assets/logos/favicon.png">
+<link rel="stylesheet" href="../assets/site.css">
+<script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand" href="../" aria-label="Macroscopic Quantum Optics, home page">
+      <img class="mqo only-light" src="../assets/logos/mqo-logo.svg" alt="MQO, Macroscopic Quantum Optics" width="1034" height="482">
+      <img class="mqo only-dark" src="../assets/logos/mqo-logo-dark.svg" alt="MQO, Macroscopic Quantum Optics" width="1034" height="482">
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="../">Home</a>
+      <a href="../research/">Research</a>
+      <a href="../people/">People</a>
+      <a href="../publications/">Publications</a>
+      <a href="../news/">News</a>
+      <a href="../resources/" aria-current="page">Resources</a>
+      <a href="../join/">Positions</a>
+    </nav>
+    <a class="aalto-link" href="https://www.aalto.fi/en/department-of-applied-physics/macroscopic-quantum-optics-mqo"><img class="aalto" src="../assets/logos/aalto-logo-university.png" alt="Aalto University" width="441" height="359"></a>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+
+    <section class="intro">
+      <h1>Resources</h1>
+      <p>Software we wrote for our own lab work and share openly. The code is on GitHub at <a href="https://github.com/macroscopicquantumoptics">github.com/macroscopicquantumoptics</a>; issues and pull requests are welcome.</p>
+    </section>
+
+    <!-- Copy an <li class="news"> to add a tool: name, what it does, links to the live page and the code, and a screenshot in assets/resources/ (about 960 x 600). -->
+    <section class="block">
+      <h2>Tools</h2>
+      <ul class="rows tools">
+        <li class="news" id="levtrap">
+          <div>
+            <h3>levtrap</h3>
+            <p>Optical forces on a sphere in a focused laser beam, calculated in the browser. It finds where a particle is trapped, the trap frequencies and depth, scattered and absorbed power and photon-recoil heating, for Gaussian, LG and HG beams. The physics is a Python port of part of the Optical Tweezers Toolbox and runs through Pyodide; a second page traces a tilted asphere and feeds the aberrated focus into the same force calculation.</p>
+            <p class="link"><a href="https://macroscopicquantumoptics.github.io/levtrap/">Open levtrap</a> · <a href="https://github.com/macroscopicquantumoptics/levtrap">Code</a></p>
+          </div>
+          <figure><img src="../assets/resources/levtrap.jpg" alt="levtrap trap simulator: particle and beam settings on the left, a summary of trap position, frequencies and depth on the right" width="960" height="600" loading="lazy"></figure>
+        </li>
+        <li class="news" id="plot-bench">
+          <div>
+            <h3>PlotBench</h3>
+            <p>Plot and fit data from almost any table file: CSV, spreadsheets, JSON, FITS and TIFF, among others. It finds the numbers in a file, keeps the metadata next to them, and gets you to a clean plot and a fit. Files are read inside the page and never uploaded.</p>
+            <p class="link"><a href="https://macroscopicquantumoptics.github.io/plot-bench/">Open PlotBench</a> · <a href="https://github.com/macroscopicquantumoptics/plot-bench">Code</a></p>
+          </div>
+          <figure><img src="../assets/resources/plot-bench.jpg" alt="PlotBench start screen with buttons to open files and a list of example data sets" width="960" height="600" loading="lazy"></figure>
+        </li>
+        <li class="news" id="quop">
+          <div>
+            <h3>QuOp Tabletop</h3>
+            <p>A virtual optical table for sketching experimental setups: drop lasers, waveplates, lenses, mirrors and detectors on the table and trace the beams between them. It is part of QuOp, our lab web app, which also has quick calculators and plotters for oscilloscope CSV and spectrometer FITS files.</p>
+            <p class="link"><a href="https://kakitkelvinho.github.io/quop/builder/tabletop/">Open the Tabletop</a> · <a href="https://kakitkelvinho.github.io/quop/">QuOp</a> · <a href="https://github.com/kakitkelvinho/quop">Code</a></p>
+          </div>
+          <figure><img src="../assets/resources/quop-tabletop.jpg" alt="QuOp Tabletop with a laser, half-wave plate, beam splitter cube, lens, sample, filter, spectrometer and photodiode placed on the table" width="960" height="600" loading="lazy"></figure>
+        </li>
+      </ul>
+    </section>
+
+  </div>
+</main>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div>
+      <h2>Macroscopic Quantum Optics</h2>
+      <address>Department of Applied Physics<br>Aalto University School of Science<br>Tekniikantie 17A, 02150 Espoo<br>Finland</address>
+    </div>
+    <div>
+      <h2>Contact</h2>
+      <p><a href="mailto:anton.zasedatelev@aalto.fi">anton.zasedatelev@aalto.fi</a><br>+358 50 340 6926</p>
+      <p><a href="../join/">Join the group</a></p>
+    </div>
+    <div>
+      <h2>Elsewhere</h2>
+      <ul>
+        <li><a href="https://www.aalto.fi/en/department-of-applied-physics/macroscopic-quantum-optics-mqo">Group page on aalto.fi</a></li>
+        <li><a href="https://qclm.aalto.fi">QCLM conference</a></li>
+        <li><a href="https://www.linkedin.com/company/macroscopic-quantum-optics/">LinkedIn</a></li>
+        <li><a href="https://github.com/macroscopicquantumoptics">GitHub</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<button class="theme-switch" type="button" role="switch" aria-checked="false" aria-label="Dark mode">
+  <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+  <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg>
+</button>
+<script src="../assets/site.js"></script>
+</body>
+</html>

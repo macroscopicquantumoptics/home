@@ -1,0 +1,48 @@
+# To switch this on, move this file to .github/workflows/linkedin-news.yml (it could not be pushed there automatically).
+# Actions tab -> "News from LinkedIn" -> Run workflow, paste the link to one post.
+# It adds the post to the news page and opens a pull request; nothing goes live until someone merges it.
+# Needs Settings -> Actions -> General -> "Allow GitHub Actions to create and approve pull requests".
+name: News from LinkedIn
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: Link to the LinkedIn post
+        required: true
+      category:
+        description: Shown after the date
+        type: choice
+        options: [News, Event, Paper, People, Talk]
+        default: News
+      title:
+        description: Headline (leave empty to use the post's first sentence)
+        required: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  add:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add the post to the news page
+        env:
+          URL: ${{ inputs.url }}
+          CATEGORY: ${{ inputs.category }}
+          TITLE: ${{ inputs.title }}
+        run: |
+          args=("$URL" --category "$CATEGORY")
+          if [ -n "$TITLE" ]; then args+=(--title "$TITLE"); fi
+          python3 tools/linkedin_news.py "${args[@]}"
+      - uses: peter-evans/create-pull-request@v7
+        with:
+          branch: news/linkedin-${{ github.run_id }}
+          title: "News: ${{ inputs.title || 'post from LinkedIn' }}"
+          commit-message: Add a LinkedIn post to the news page
+          body: |
+            From ${{ inputs.url }}
+
+            Before merging: shorten the text if needed, write the picture's alt text (search for TODO), and check the date.
