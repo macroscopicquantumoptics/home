@@ -8,6 +8,11 @@
 <link rel="icon" href="/assets/logos/favicon.png">
 <link rel="stylesheet" href="/assets/site.css">
 <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+<!-- The site used to live at /home/ (when the repository was called "home"): send old links to the same page at the root. -->
+<script>
+  var old = location.pathname.match(/^\/home(\/.*)?$/);
+  if (old) location.replace((old[1] || "/") + location.search + location.hash);
+</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
