@@ -1,6 +1,6 @@
 # MQO group website: instructions for people and AI agents
 
-Website of the Macroscopic Quantum Optics group, Department of Applied Physics, Aalto University. It is plain HTML and one CSS file: no build step, no Node, no frameworks, no CDNs. Edit a page in any editor, open it in a browser, push to `main`, and GitHub Pages publishes it (`.github/workflows/static.yml`).
+Website of the Macroscopic Quantum Optics group, Department of Applied Physics, Aalto University. It is plain HTML and one CSS file: no build step, no Node, no frameworks, no CDNs. The one library is three.js, copied into `assets/vendor/three/` for the 3D models on the home page. Edit a page in any editor, open it in a browser, push to `main`, and GitHub Pages publishes it (`.github/workflows/static.yml`).
 
 The look follows the same Aalto brand rules as the group meeting slides, so the two stay consistent.
 
@@ -18,12 +18,14 @@ join/index.html            open positions and how to apply ("Positions" in the n
 tools/linkedin_news.py     turns one LinkedIn post into a news item (see Common edits)
 404.html                   not-found page; uses absolute paths (/assets/...) because it is served at any URL
 assets/site.css            all styling; colours are variables at the top
-assets/site.js             the light/dark toggle, nothing else
+assets/site.js             the light/dark toggle, and the home page video when WebGL is missing
+assets/hero3d.js           home page 3D models (dark trap, microcavity) you can turn and zoom
+assets/vendor/three/       three.js r170 and the addons hero3d.js uses, bundled (MIT licence); keep the licence file
 assets/fonts/              Inter (SIL OFL), bundled; keep the licence file
 assets/logos/              Aalto logo, MQO logo (light and dark), favicon
 assets/people/             portraits, firstname-lastname.jpg, about 600x800
 assets/news/               news pictures
-assets/hero/               home page background: dark-trap loop (webm, mp4) and its still poster
+assets/hero/               dark-trap loop (webm, mp4) and still: shown only where the 3D model cannot run
 assets/resources/          screenshots for the resources page, about 960x600
 ```
 
@@ -46,7 +48,7 @@ These follow the Aalto brand guidelines (https://brand.aalto.fi/en/brand/visual-
 
 - **Font:** Inter, Bold for headings (tracking -25, `letter-spacing: -0.025em`) and Regular for everything else. Arial is the fallback.
 - **Colours:** black on white in light mode, white on black in dark mode. School of Science yellow `#F7E159` is the only highlight: the current nav item, link hover, and `<mark>` around a key phrase. Never yellow text on white.
-- **Home page picture:** the one dark area of the site, in both themes: a rendering of the dark optical trap (from `dark_trap_cover.blend`, scene S1, camera 1) that loops and leans a little with the cursor. With reduced motion it stays still.
+- **Home page picture:** the one dark area of the site, in both themes: 3D models in `assets/hero3d.js`, picked with the dots and arrows at the bottom of the picture, with a grey link to the model's paper in the lower right corner. The dark optical trap (after `dark_trap_cover.blend`, computed from the trapping light's intensity) and molecules in a microcavity (after the figure in PRL 133, 186903). Drag turns a model (the trap camera stays above the light field), pinch or Ctrl + scroll zooms, double-click resets the view; the plain scroll wheel still scrolls the page. With reduced motion nothing moves by itself. To add a model, write a function like `cavityModel` and add it to `ORDER`, a dot with its `data-scene` and a `.hero-paper` link with its `data-for`.
 - **Flat:** no cards, boxes, shadows, gradients, rounded corners, chips or tags, icons or arrows on links. Separate list items with a 1px hairline (`var(--line)`) and white space.
 - **Type:** three sizes only (page title, section title, body). Dates, roles and authors are body size in grey, not smaller. Sentence case, no UPPER CASE, left-aligned, ragged right. Bold a person's name on its first mention in running text.
 - **Alignment:** everything sits on one left edge; bulleted lists are indented further than their heading.

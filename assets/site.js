@@ -22,30 +22,16 @@
   mark();
 })();
 
-// Home page: the dark-trap rendering leans a little towards the cursor, like looking into the trap from a new angle.
+// Home page without WebGL: the dark-trap video plays, or shows its first frame with reduced motion.
 (function () {
-  var hero = document.querySelector(".hero");
-  var media = hero && hero.querySelector(".hero-media");
-  if (!media) return;
-  var video = media.querySelector("video");
+  var video = document.querySelector(".hero-media video");
+  if (!video) return;
   var still = window.matchMedia("(prefers-reduced-motion: reduce)");
-
-  // reduced motion: show the first frame only
   function motion() {
-    if (!video) return;
+    if (video.parentNode.classList.contains("live")) return; // the 3D model has taken over
     if (still.matches) video.pause();
     else video.play().catch(function () {});
   }
   still.addEventListener("change", motion);
   motion();
-
-  if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-  hero.addEventListener("pointermove", function (e) {
-    if (still.matches) return;
-    var box = hero.getBoundingClientRect();
-    var dx = (e.clientX - box.left) / box.width - 0.5;
-    var dy = (e.clientY - box.top) / box.height - 0.5;
-    media.style.transform = "translate(" + (-dx * 2.4) + "%," + (-dy * 2.4) + "%) scale(1.03)";
-  });
-  hero.addEventListener("pointerleave", function () { media.style.transform = ""; });
 })();
